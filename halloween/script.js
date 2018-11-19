@@ -10,6 +10,7 @@ $(document).ready(function(){
 		display.text("It is halloween!");
 	}else{
 		display.text("IT is not halloween");
+		console.log(display);
 		//Is it before Halloween of this year?
 
 			//Get halloween of this year date
