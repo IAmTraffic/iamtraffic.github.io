@@ -14,7 +14,7 @@ $(document).ready(function(){
 		if(currentMonth < 9 || (currentMonth == 9 && currentDate < 31)){	//It isn't halloween yet
 			display.text("Oct 31, " + currentYear);
 		}else{
-			display.text("Oct 31, " + (currentYear + 1901));
+			display.text("Oct 31, " + (currentYear + 1));
 		}
 	}
 });
