@@ -6,7 +6,7 @@ $(document).ready(function(){
 
 	var display = $("#countdown");
 
-	console.log(currentDate + ", " + currentMonth + ", " + currentYear);
+	//console.log(currentDate + ", " + currentMonth + ", " + currentYear);
 
 	if(currentDate == 31 && currentMonth == 9){	//It is halloween!
 		display.innerHTML = "It is halloween!";
