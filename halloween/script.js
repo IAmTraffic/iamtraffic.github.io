@@ -4,17 +4,17 @@ $(document).ready(function(){
 	var currentMonth = date.getMonth();
 	var currentYear = date.getYear();
 
+	var nextHalloween;
+
 	var display = $("#countdown");
 
 	if(currentDate == 31 && currentMonth == 9){	//It is halloween!
 		display.text("It is halloween!");
 	}else{
-		display.text("IT is not halloween");
-		console.log(display);
-		//Is it before Halloween of this year?
-
-			//Get halloween of this year date
-
-		//If no, get halloween of next year
+		if(currentMonth < 9 || (currentMonth == 9 && currentDate < 31)){	//It isn't halloween yet
+			display.text("Oct 31, " + currentYear);
+		}else{
+			display.text("Oct 31, " + currentYear + 1);
+		}
 	}
 });
