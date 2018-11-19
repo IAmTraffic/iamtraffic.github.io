@@ -2,7 +2,7 @@ $(document).ready(function(){
 	var date = new Date();
 	var currentDate = date.getDate();
 	var currentMonth = date.getMonth();
-	var currentYear = date.getYear();
+	var currentYear = date.getYear() + 1900;
 
 	var nextHalloween;
 
@@ -14,7 +14,7 @@ $(document).ready(function(){
 		if(currentMonth < 9 || (currentMonth == 9 && currentDate < 31)){	//It isn't halloween yet
 			display.text("Oct 31, " + currentYear);
 		}else{
-			display.text("Oct 31, " + currentYear + 1);
+			display.text("Oct 31, " + (currentYear + 1901);
 		}
 	}
 });
