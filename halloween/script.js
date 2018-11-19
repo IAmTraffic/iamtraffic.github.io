@@ -37,4 +37,6 @@ $(document).ready(function(){
 			getCountdown();
 		}, 1000);
 	}
+
+	getCountdown();
 });
