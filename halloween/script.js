@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	console.log("afadsfadsfa");
+	console.log(new Date().getMonth());
 
 	//Is it halloween?
 
