@@ -10,6 +10,7 @@ $(document).ready(function(){
 	var display = $("#countdown");
 
 	function getCountdown(){
+		console.log('debug');
 		if(currentDate == 31 && currentMonth == 9){	//It is halloween!
 			display.text("It is halloween! Be gay! Do crimes!");
 		}else{
