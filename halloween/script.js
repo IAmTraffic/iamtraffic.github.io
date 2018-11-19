@@ -4,17 +4,32 @@ $(document).ready(function(){
 	var currentMonth = date.getMonth();
 	var currentYear = date.getYear() + 1900;
 
+	var currentEpoch = new Date().getTime();
 	var nextHalloween;
 
 	var display = $("#countdown");
 
 	if(currentDate == 31 && currentMonth == 9){	//It is halloween!
-		display.text("It is halloween!");
+		display.text("It is halloween! Be gay! Do crimes!");
 	}else{
+
+		//Find next halloween
 		if(currentMonth < 9 || (currentMonth == 9 && currentDate < 31)){	//It isn't halloween yet
-			display.text("Oct 31, " + currentYear);
+			nextHalloween = "Oct 31, " + currentYear;
 		}else{
-			display.text("Oct 31, " + (currentYear + 1));
+			nextHalloween = "Oct 31, " + (currentYear + 1);
 		}
+
+		//Seconds until next Halloween
+		var secondsLeft = nextHalloween.getTime() - currentEpoch;
+
+		//Calculations (credit to w3schools)
+		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+		//Display it babey
+		display.text(days + " Days, " + hours + " Hours, " + minutes + " Minutes, and " + seconds + " Seconds");
 	}
 });
