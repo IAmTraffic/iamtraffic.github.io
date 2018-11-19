@@ -8,4 +8,4 @@ $(document).ready(function(){
 			//Get halloween of this year date
 
 		//If no, get halloween of next year
-})
+});
