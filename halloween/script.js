@@ -9,7 +9,7 @@ $(document).ready(function(){
 
 	var display = $("#countdown");
 
-	while(true){
+	function getCountdown(){
 		if(currentDate == 31 && currentMonth == 9){	//It is halloween!
 			display.text("It is halloween! Be gay! Do crimes!");
 		}else{
@@ -34,7 +34,7 @@ $(document).ready(function(){
 			display.text(days + " Days, " + hours + " Hours, " + minutes + " Minutes, and " + seconds + " Seconds");
 		}
 		setTimeout(function(){
-			console.log("reloaded");
+			getCountdown();
 		}, 1000);
 	}
 });
