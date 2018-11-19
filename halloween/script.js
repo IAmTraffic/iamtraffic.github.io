@@ -21,7 +21,7 @@ $(document).ready(function(){
 		}
 
 		//Seconds until next Halloween
-		var secondsLeft = new Date(nextHalloween).getTime() - currentEpoch;
+		var distance = new Date(nextHalloween).getTime() - currentEpoch;
 
 		//Calculations (credit to w3schools)
 		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
