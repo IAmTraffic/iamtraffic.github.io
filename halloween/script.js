@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	console.log("asdljfalsdj");
+	console.log("afadsfadsfa");
 
 	//Is it halloween?
 
