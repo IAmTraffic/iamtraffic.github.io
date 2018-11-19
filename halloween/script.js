@@ -1,5 +1,10 @@
 $(document).ready(function(){
-	console.log(new Date().getMonth());
+	var date = new Date();
+	var currentDate = date.getDate();
+	var currentMonth = date.getMonth();
+	var currentYear = date.getYear();
+
+	console.log(currentDate + ", " + currentMonth + ", " + currentYear);
 
 	//Is it halloween?
 
