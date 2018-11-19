@@ -1,17 +1,16 @@
 $(document).ready(function(){
-	var date = new Date();
 
 	var display = $("#countdown");
 
 	function getCountdown(){
-		console.log('debug');
+		var date = new Date();
 		var currentDate = date.getDate();
 		var currentMonth = date.getMonth();
 		var currentYear = date.getYear() + 1900;
 
 		var currentEpoch = new Date().getTime();
 		var nextHalloween;
-		
+
 		if(currentDate == 31 && currentMonth == 9){	//It is halloween!
 			display.text("It is halloween! Be gay! Do crimes!");
 		}else{
