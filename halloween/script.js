@@ -9,27 +9,30 @@ $(document).ready(function(){
 
 	var display = $("#countdown");
 
-	if(currentDate == 31 && currentMonth == 9){	//It is halloween!
-		display.text("It is halloween! Be gay! Do crimes!");
-	}else{
-
-		//Find next halloween
-		if(currentMonth < 9 || (currentMonth == 9 && currentDate < 31)){	//It isn't halloween yet
-			nextHalloween = "Oct 31, " + currentYear;
+	while(true){
+		if(currentDate == 31 && currentMonth == 9){	//It is halloween!
+			display.text("It is halloween! Be gay! Do crimes!");
 		}else{
-			nextHalloween = "Oct 31, " + (currentYear + 1);
+
+			//Find next halloween
+			if(currentMonth < 9 || (currentMonth == 9 && currentDate < 31)){	//It isn't halloween yet
+				nextHalloween = "Oct 31, " + currentYear;
+			}else{
+				nextHalloween = "Oct 31, " + (currentYear + 1);
+			}
+
+			//Seconds until next Halloween
+			var distance = new Date(nextHalloween).getTime() - currentEpoch;
+
+			//Calculations (credit to w3schools)
+			var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			//Display it babey
+			display.text(days + " Days, " + hours + " Hours, " + minutes + " Minutes, and " + seconds + " Seconds");
 		}
-
-		//Seconds until next Halloween
-		var distance = new Date(nextHalloween).getTime() - currentEpoch;
-
-		//Calculations (credit to w3schools)
-		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-		//Display it babey
-		display.text(days + " Days, " + hours + " Hours, " + minutes + " Minutes, and " + seconds + " Seconds");
+		setTimeout(function(){}, 1000);
 	}
 });
