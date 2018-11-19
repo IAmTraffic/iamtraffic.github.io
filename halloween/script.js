@@ -33,6 +33,8 @@ $(document).ready(function(){
 			//Display it babey
 			display.text(days + " Days, " + hours + " Hours, " + minutes + " Minutes, and " + seconds + " Seconds");
 		}
-		setTimeout(function(){}, 1000);
+		setTimeout(function(){
+			console.log("reloaded");
+		}, 1000);
 	}
 });
