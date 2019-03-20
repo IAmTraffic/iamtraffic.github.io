@@ -6,6 +6,6 @@ $("#calculateButton").click(function(){
 	});
 });
 
-function findDayOfWeekIndex(String day){
+function findDayOfWeekIndex(day){
 	return day.equals($("#dayInput").val());
 }
