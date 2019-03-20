@@ -2,6 +2,6 @@ var daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 
 $("#calculateButton").click(function(){
 		var dayOfWeekNum = daysOfWeek.indexOf($("#dayInput").value);
-		console.log($("#dayInput").value);
+		console.log($("#dayInput"));
 	});
 });
