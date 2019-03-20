@@ -7,5 +7,6 @@ $("#calculateButton").click(function(){
 });
 
 function findDayOfWeekIndex(day){
+	console.log(day);
 	return day;//.equals($("#dayInput").val());
 }
