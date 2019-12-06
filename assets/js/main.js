@@ -399,3 +399,7 @@
 					});
 
 })(jQuery);
+
+$(document).ready(function(){
+	console.log("Ivy wrote this");
+});
