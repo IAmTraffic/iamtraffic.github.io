@@ -460,7 +460,7 @@ $(document).ready(function(){
 		var newOb = document.getElementById("ob").value;
 
 		if(oldDiceNum != newDiceNum || oldMinSucceed != newDiceNum || oldOb != newOb){		//Something has changed
-			var numIterations = 100;
+			var numIterations = 1000;
 			var numSuccesses = 0;
 
 			for(var i = 0; i < numIterations; i++){		//For each iteration
@@ -479,7 +479,7 @@ $(document).ready(function(){
 			}
 
 			//Update $("#probability").text
-			var probability = numIterations/numSuccesses;
+			var probability = numSuccesses/numIterations;
 			$("#probability").text(probability);
 
 			//Update newDiceNum, etc.
