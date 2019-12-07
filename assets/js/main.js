@@ -492,8 +492,8 @@ $(document).ready(function(){
 			oldOb = newOb;
 
 			//Update $("#probability").text
-			var probability = passedTests/numIterations;
-			$("#probability").text(probability);
+			var probability = Math.floor((passedTests/numIterations)*100);
+			$("#probability").text(probability + "%");
 		}
 
 		setTimeout(function(){
