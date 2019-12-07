@@ -458,46 +458,46 @@ $(document).ready(function(){
 	console.log(oldMinSucceed);
 	console.log(oldOb);
 
-	function calcBurningProb(){
-		var newDiceNum = $("#diceNum").value;
-		var newMinSucceed = $("#minSucceed").value;
-		var newOb = $("#ob").value;
+	// function calcBurningProb(){
+	// 	var newDiceNum = $("#diceNum").value;
+	// 	var newMinSucceed = $("#minSucceed").value;
+	// 	var newOb = $("#ob").value;
 
-		if(oldDiceNum != newDiceNum || oldMinSucceed != newDiceNum || oldOb != newOb){		//Something has changed
-			var numIterations = 100;
-			var numSuccesses = 0;
+	// 	if(oldDiceNum != newDiceNum || oldMinSucceed != newDiceNum || oldOb != newOb){		//Something has changed
+	// 		var numIterations = 100;
+	// 		var numSuccesses = 0;
 
-			for(int i = 0; i < numIterations; i++){		//For each iteration
-				for(int j = 0; j < newDiceNum){		//For each die
-					//Roll the die
-					var roll = Math.floor((Math.random() * 6) + 1);
-					console.log(roll);
-					if(roll >= newMinSucceed){	//Does it succeed?
-						//Increase numSuccesses
-						numSuccesses++;
-						console.log("success");
-					}else{
-						console.log("traitor");
-					}
-				}
-			}
+	// 		for(int i = 0; i < numIterations; i++){		//For each iteration
+	// 			for(int j = 0; j < newDiceNum){		//For each die
+	// 				//Roll the die
+	// 				var roll = Math.floor((Math.random() * 6) + 1);
+	// 				console.log(roll);
+	// 				if(roll >= newMinSucceed){	//Does it succeed?
+	// 					//Increase numSuccesses
+	// 					numSuccesses++;
+	// 					console.log("success");
+	// 				}else{
+	// 					console.log("traitor");
+	// 				}
+	// 			}
+	// 		}
 
-			//Update $("#probability").text
-			var probability = numIterations/numSuccesses;
-			$("#probability").text(probability);
+	// 		//Update $("#probability").text
+	// 		var probability = numIterations/numSuccesses;
+	// 		$("#probability").text(probability);
 
-			//Update newDiceNum, etc.
-			oldDiceNum = newDiceNum;
-			oldMinSucceed = newMinSucceed;
-			oldOb = newOb;
-		}else{
-			//Nothing has changed
-		}
+	// 		//Update newDiceNum, etc.
+	// 		oldDiceNum = newDiceNum;
+	// 		oldMinSucceed = newMinSucceed;
+	// 		oldOb = newOb;
+	// 	}else{
+	// 		//Nothing has changed
+	// 	}
 
-		setTimeout(function(){
-			calcBurningProb();
-		}, 100);
-	}
+	// 	setTimeout(function(){
+	// 		calcBurningProb();
+	// 	}, 100);
+	// }
 
 	//calcBurningProb();
 
