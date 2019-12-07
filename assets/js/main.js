@@ -480,11 +480,13 @@ $(document).ready(function(){
 
 			//Update newDiceNum, etc.
 			oldDiceNum = newDiceNum;
-			console.log(oldDiceNum);
-			console.log(newDiceNum);
-			console.log("----------");
 			oldMinSucceed = newMinSucceed;
 			oldOb = newOb;
+
+
+			console.log(oldMinSucceed);
+			console.log(newMinSucceed);
+			console.log("----------");
 
 			//Update $("#probability").text
 			var probability = numSuccesses/numIterations;
