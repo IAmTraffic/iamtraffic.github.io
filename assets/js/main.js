@@ -450,14 +450,14 @@ $(document).ready(function(){
 
 //Burning Wheel Start ==========================================================================================================================================
 
-	var oldDiceNum = document.getElementById("diceNum").value;
-	var oldMinSucceed = document.getElementById("minSucceed").value;
-	var oldOb = document.getElementById("ob").value;
+	var oldDiceNum = 0;
+	var oldMinSucceed = 0;
+	var oldOb = 0;
 
 	function calcBurningProb(){
-		var newDiceNum = $("#diceNum").value;
-		var newMinSucceed = $("#minSucceed").value;
-		var newOb = $("#ob").value;
+		var newDiceNum = document.getElementById("diceNum").value;
+		var newMinSucceed = document.getElementById("minSucceed").value;
+		var newOb = document.getElementById("ob").value;
 
 		if(oldDiceNum != newDiceNum || oldMinSucceed != newDiceNum || oldOb != newOb){		//Something has changed
 			var numIterations = 100;
