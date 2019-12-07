@@ -451,12 +451,8 @@ $(document).ready(function(){
 //Burning Wheel Start ==========================================================================================================================================
 
 	var oldDiceNum = document.getElementById("diceNum").value;
-	var oldMinSucceed = $("#minSucceed").value;
-	var oldOb = $("#ob").value;
-
-	console.log(oldDiceNum);
-	console.log(oldMinSucceed);
-	console.log(oldOb);
+	var oldMinSucceed = document.getElementById("minSucceed").value;
+	var oldOb = document.getElementById("ob").value;
 
 	function calcBurningProb(){
 		var newDiceNum = $("#diceNum").value;
@@ -499,7 +495,7 @@ $(document).ready(function(){
 		}, 100);
 	}
 
-	//calcBurningProb();
+	calcBurningProb();
 
 //Burning Wheel End ==========================================================================================================================================
 
