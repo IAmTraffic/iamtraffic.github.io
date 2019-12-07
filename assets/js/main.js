@@ -464,7 +464,7 @@ $(document).ready(function(){
 			var numSuccesses = 0;
 
 			for(var i = 0; i < numIterations; i++){		//For each iteration
-				for(var j = 0; j < newDiceNum){		//For each die
+				for(var j = 0; j < newDiceNum; j++){		//For each die
 					//Roll the die
 					var roll = Math.floor((Math.random() * 6) + 1);
 					console.log(roll);
