@@ -460,7 +460,7 @@ $(document).ready(function(){
 		var newOb = document.getElementById("ob").value;
 
 		if(oldDiceNum != newDiceNum || oldMinSucceed != newMinSucceed || oldOb != newOb){		//Something has changed
-			var numIterations = 1000;
+			var numIterations = 10000;
 			var numSuccesses = 0;
 
 			for(var i = 0; i < numIterations; i++){		//For each iteration
@@ -478,6 +478,9 @@ $(document).ready(function(){
 				}
 			}
 
+			console.log(numSuccesses);
+			console.log(numIterations);
+
 			//Update newDiceNum, etc.
 			oldDiceNum = newDiceNum;
 			oldMinSucceed = newMinSucceed;
@@ -486,8 +489,6 @@ $(document).ready(function(){
 			//Update $("#probability").text
 			var probability = numSuccesses/numIterations;
 			$("#probability").text(probability);
-		}else{
-			//Nothing has changed
 		}
 
 		setTimeout(function(){
@@ -495,7 +496,7 @@ $(document).ready(function(){
 		}, 100);
 	}
 
-	calcBurningProb();
+	calcBurningProb();		//Get it started
 
 //Burning Wheel End ==========================================================================================================================================
 
