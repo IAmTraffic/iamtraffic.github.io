@@ -459,9 +459,7 @@ $(document).ready(function(){
 		var newMinSucceed = document.getElementById("minSucceed").value;
 		var newOb = document.getElementById("ob").value;
 
-		console.log(oldDiceNum != newDiceNum);
-
-		if(oldDiceNum != newDiceNum || oldMinSucceed != newDiceNum || oldOb != newOb){		//Something has changed
+		if(oldDiceNum != newDiceNum || oldMinSucceed != newMinSucceed || oldOb != newOb){		//Something has changed
 			var numIterations = 1000;
 			var numSuccesses = 0;
 
