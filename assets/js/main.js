@@ -461,9 +461,10 @@ $(document).ready(function(){
 
 		if(oldDiceNum != newDiceNum || oldMinSucceed != newMinSucceed || oldOb != newOb){		//Something has changed
 			var numIterations = 10000;
-			var numSuccesses = 0;
+			var passedTests = 0;
 
 			for(var i = 0; i < numIterations; i++){		//For each iteration
+				var numSuccesses = 0;
 				for(var j = 0; j < newDiceNum; j++){		//For each die
 					//Roll the die
 					var roll = Math.floor((Math.random() * 6) + 1);
@@ -476,9 +477,13 @@ $(document).ready(function(){
 						// console.log("traitor");
 					}
 				}
+
+				if(numSuccesses >= newOb){
+					passedTests++;
+				}
 			}
 
-			console.log(numSuccesses);
+			console.log(passedTests);
 			console.log(numIterations);
 
 			//Update newDiceNum, etc.
@@ -487,7 +492,7 @@ $(document).ready(function(){
 			oldOb = newOb;
 
 			//Update $("#probability").text
-			var probability = numSuccesses/numIterations;
+			var probability = passedTests/numIterations;
 			$("#probability").text(probability);
 		}
 
