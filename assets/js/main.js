@@ -483,9 +483,6 @@ $(document).ready(function(){
 				}
 			}
 
-			console.log(passedTests);
-			console.log(numIterations);
-
 			//Update newDiceNum, etc.
 			oldDiceNum = newDiceNum;
 			oldMinSucceed = newMinSucceed;
