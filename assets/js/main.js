@@ -467,25 +467,28 @@ $(document).ready(function(){
 				for(var j = 0; j < newDiceNum; j++){		//For each die
 					//Roll the die
 					var roll = Math.floor((Math.random() * 6) + 1);
-					console.log(roll);
+					// console.log(roll);
 					if(roll >= newMinSucceed){	//Does it succeed?
 						//Increase numSuccesses
 						numSuccesses++;
-						console.log("success");
+						// console.log("success");
 					}else{
-						console.log("traitor");
+						// console.log("traitor");
 					}
 				}
 			}
 
+			//Update newDiceNum, etc.
+			oldDiceNum = newDiceNum;
+			console.log(oldDiceNum);
+			console.log(newDiceNum);
+			console.log("----------");
+			oldMinSucceed = newMinSucceed;
+			oldOb = newOb;
+
 			//Update $("#probability").text
 			var probability = numSuccesses/numIterations;
 			$("#probability").text(probability);
-
-			//Update newDiceNum, etc.
-			oldDiceNum = newDiceNum;
-			oldMinSucceed = newMinSucceed;
-			oldOb = newOb;
 		}else{
 			//Nothing has changed
 		}
