@@ -51,17 +51,273 @@
 
 								<div style="border: 2px solid white;text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
 									<h2 class="major">Algorithms Educational Aid</h2>
-									<p>A senior year independent study made with my classmate Caroline Knote under the supervision of the 311 Algorithms professor Audrey St. John at Mount Holyoke College.
+									<p>An academic independent study made with my classmate Caroline Knote under the supervision of Audrey St. John at Mount Holyoke College for use in the CS-311 Algoritms course.
 										<br><br>Best viewed <a href="http://mhc-algorithms.github.io/">here</a></p>
 										<br>
 										<br>
 										<iframe style="width: 100%;height: 500px;" src="http://mhc-algorithms.github.io/" title="Algorithms">The iframe doesn't appear to be working. Please try the link above instead.</iframe>
 								</div>
 
+								<div style="border: 2px solid white;text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
+									<h2 class="major">Compiler Design</h2>
+									<p>A fully functioning, self-contained compiler. Takes fictional C-- code and compiles it to MIPS to be interpreted via SPIM. Code generation is unfinished, but ongoing.</p>
+										<br>
+										<br>
+										<a href="./Compiler_IvyOO.zip">Download ZIP</a>
+								</div>
+
+								<div style="border: 2px solid white;text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
+									<h2 class="major">Kardashev Predictions</h2>
+									<p>Given an optimistic look at the future of humanity, how long until we fully colonize the Milky Way? This question is explored in this python/jupyter powered simulation.</p>
+										<br>
+										<br>
+										<a href="./final_project_ivy.ipynb">Download File</a>
+								</div>
+
+
+								<div style="border: 2px solid white;text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
+									<h2 class="major">MHC Shell</h2>
+									<p>
+										A simple shell with a handful of built in commands, PATH functionality, and basic multithreading.
+									</p>
+										<br>
+										<br>
+										<div style="background-color:#444444;padding:5px;border-radius:5px">
+										<pre style="text-align:left;overflow:scroll;height:400px;font-size:0.7em;">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/wait.h&gt;
+
+#define PROMPT_TEXT "mhcsh> "
+#define INPUT_LEN 128
+
+char WHITESPACE[4*5] = {" \n \t \r"};
+char BUILT_IN_COMMANDS[5][10] = {"exit", "cd", "pwd", "setpath", "printpath"};
+int NUM_BUILT_IN_COMMANDS = 5;
+
+
+
+char path[INPUT_LEN];			//The string which contains the path variable. I found it easier to store this as a string and tokenize it as needed, rather than store the tokens here
+int pathFilled = 0;				//Whether or not the path is set to something
+
+//Exits the shell with an exit code of 0
+int my_exit(int argc, char argv[INPUT_LEN][INPUT_LEN]){
+	exit(0);
+}
+
+//Change Directory to whatever is in argv[1] or getenv("HOME") if argv[1] == NULL
+int cd(int argc, char argv[INPUT_LEN][INPUT_LEN]){
+	if(argc == 1){
+		if(chdir(getenv("HOME")) != 0){
+			perror("Error in cd\n");
+			return 1;
+		}
+	}else{
+		if(chdir(argv[1]) != 0){
+			perror("Error in cd\n");
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+//Prints the working directory
+int pwd(int argc, char argv[INPUT_LEN][INPUT_LEN]){
+	char wd[512];
+	if(getcwd(wd, sizeof(wd)) == NULL){
+		perror("Error Getting CWD\n");
+		return 1;
+	}
+	printf("%s\n", wd);
+
+	return 0;
+}
+
+//Sets the path variable
+int setpath(int argc, char argv[INPUT_LEN][INPUT_LEN]){
+	if(argc == 1){
+		perror("Please specify a PATH to set\n");
+		return 1;
+	}
+
+	// if(strcmp(argv[1], "PATH") == 0){		//This just makes our lives easier. If you run "setpath PATH" it will set path to $PATH, which is helpful
+	// 	strcpy(path, getenv("PATH"));
+	// }else{
+	// 	strcpy(path, argv[1]);
+	// }
+
+	strcpy(path, argv[1]);
+
+	pathFilled = strlen(path);		//If a non-0 new path was set, make pathFilled true
+
+	return 0;
+}
+
+//Prints the path variable
+int printpath(int argc, char argv[INPUT_LEN][INPUT_LEN]){
+	if(!pathFilled){
+		perror("No PATH\n");
+		return 1;
+	}
+
+	printf("%s\n", path);
+
+	return 0;
+}
+
+//Handle non-built-in commands
+int nonBuiltIn(int argc, char argv[INPUT_LEN][INPUT_LEN], int foreground){
+	if(!pathFilled){
+		perror("Please specify a PATH\n");
+		return 1;
+	}else{
+		pid_t pid;
+
+		pid = fork();
+
+		if(pid < 0){	//Error forking
+			perror("Cannot Fork\n");
+			return 1;
+		}else if(pid > 0){			//I am the parent and should wait
+			if(foreground){			//I should only wait if we're running in the foreground
+				int status;
+				waitpid(pid, &status, 0);
+			}
+		}else{				//I am the child and should execute
+			//Get PATH tokens
+			char pathTokens[INPUT_LEN][INPUT_LEN];		//The List of Tokens
+			int numPathTokens = 0;						//The Number of Tokens
+
+			char *pathToken;
+			pathToken = strtok(path, ":");
+
+			int pathTokenIndex = 0;
+
+			while(pathToken != NULL){
+				strcpy(pathTokens[pathTokenIndex], pathToken);
+				pathTokenIndex++;
+				pathToken = strtok(NULL, ":");
+			}
+
+			numPathTokens = pathTokenIndex;
+
+			//Check for command in $PATH for the file and fork + exec if it exists
+			for(int i = 0; i < numPathTokens; i++){
+				char commandPath[INPUT_LEN];
+				strcpy(commandPath, pathTokens[i]);
+				strcat(commandPath, "/");
+				strcat(commandPath, argv[0]);
+
+				if(access(commandPath, X_OK) != -1){
+					char *args[argc + 1];
+					for(int j = 0; j < argc; j++){
+						args[j] = argv[j];
+					}
+
+					args[argc - 1 + foreground] = '\0';		//We want to overwrite the '&' if it exists, and we want to terminate the args array with NULL
+
+					execve(commandPath, args, 0);
+				}
+			}
+
+			//If it doesn't exist in $PATH, cannot be executed, report an error but keep the shell running
+			perror("Error Executing\n");
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int main(int argc, char *argv[]){
+
+	//Exit Gracefully if there are any arguments
+	if(argc != 1){
+		printf("Please do not specify any arguments.\n");
+		return 1;
+	}
+
+
+	//The core loop of the shell
+	while(1){
+		//Print Prompt
+		printf("%s", PROMPT_TEXT);
+
+		//Get Input (max len 128 bytes)
+		char input_string[INPUT_LEN];
+		fgets(input_string, INPUT_LEN, stdin);
+
+		if(strlen(input_string) != 0){		//Handle blank lines
+			//Parse Input into Tokens (handling blank lines and consecutive whitespace without breaking)
+			char tokens[INPUT_LEN][INPUT_LEN];		//The List of Tokens
+			int numTokens = 0;						//The Number of Tokens
+
+			char *token;
+			token = strtok(input_string, WHITESPACE);
+
+			int tokenIndex = 0;
+
+			while(token != NULL){
+				strcpy(tokens[tokenIndex], token);
+				tokenIndex++;
+				token = strtok(NULL, WHITESPACE);
+			}
+
+			numTokens = tokenIndex;
+
+			//Flag Foreground/Background with a terminating '&' (foreground is true if it should be run in foreground, false otherwise)
+			int foreground = 1;
+			if(strcmp(tokens[numTokens - 1], "&") == 0){
+				foreground = 0;
+			}
+
+			//Check if Input is Built-In Command and Execute it if it is a valid command (if it returns with an error, keep running the shell)
+			int commandIndex = -1;			//Initialized to -1. If it's a built in command, it will be changed to the index of that command
+			for(int i = 0; i < NUM_BUILT_IN_COMMANDS; i++){
+				if(strcmp(BUILT_IN_COMMANDS[i], tokens[0]) == 0){
+					commandIndex = i;
+				}
+			}
+
+			if(commandIndex != -1){
+				switch(commandIndex){
+					case 0:
+						my_exit(numTokens, tokens);
+						break;
+					case 1:
+						cd(numTokens, tokens);
+						break;
+					case 2:
+						pwd(numTokens, tokens);
+						break;
+					case 3:
+						setpath(numTokens, tokens);
+						break;
+					case 4:
+						printpath(numTokens, tokens);
+						break;
+				}
+			}else{
+				nonBuiltIn(numTokens, tokens, foreground);
+			}
+
+		}
+	}
+
+	return 0;
+}</pre>
+									</div>
+									<br>
+									<br>
+										<a href="./mhcsh.c">Download File</a>
+								</div>
+
 
 								<div style="border: 2px solid white;text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
 									<h2 class="major">Organization Sorting</h2>
-									<p>A script designed to sort members of a student organization into groups (specifically, games).
+									<p>A script designed to sort people into groups. This is used biannually by the student organization Renegades to sort players into games.
 									<div style="background-color:#444444;padding:5px;border-radius:5px">
 										<pre style="text-align:left;overflow:scroll;height:400px;font-size:0.7em;">'''
 Written by Ivy O'Neal-Odom (Class of or 2020) during Fall 2019
@@ -261,13 +517,144 @@ print ("Lonely Players (players who aren't in a game): " + str(lonely_players))<
 									</div>
 								</div>
 
+								<div style="border: 2px solid white;text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
+									<h2 class="major">Fourier Transforms</h2>
+									<p>Some experimentation with Fourier transforms. Generates a waveform from pure tones and breaks it back down into its tones via a Fourier transform.
+									<div style="background-color:#444444;padding:5px;border-radius:5px">
+										<pre style="text-align:left;overflow:scroll;height:400px;font-size:0.7em;">
+											'''
+Written by Ivy O'Neal-Odom in November 2019 with help from Pythonic for the Fourier transform
+
+This is a personal project experimenting with Fourier transforms. This program does two things:
+	1) Given two pure tones, generate a resonant overtone, and then break it down again into pure tones via a Fourier transform
+	2) Given an audio file, read in the waveform, and then break it down into pure tones via a Fourier transform (WIP)
+
+Currently (as of November 14, 2019), the first goal has been achieved, but the second one is still a challenge.
+Part of the issue is that the Fourier transform function requires the data to be stored in a very specfic manner, and 
+python's various proprietary data structures are not playing nice with each other. 
+'''
+import numpy as np
+import matplotlib.pyplot as plotter
+import pprint
+from scipy.io import wavfile as wav
+
+pp = pprint.PrettyPrinter()		#Used to print arrays in a cleaner format
+
+audioFile = ""		#Set to empty if you want to construct the soundwave, set to a file url if you want to read the .wav file.
+
+#---------------------------------------------------Get soundwave from .wav file--------------------------------------------------------------
+if len(audioFile) > 0:
+	print("Generating Soundwave from File")
+	samplingFrequency, sineSum_ = wav.read(audioFile)
+	beginTime = 0
+	samplingInterval = 1/samplingFrequency
+	endTime = 100
+
+	sineSum = []
+	for i in range(0, len(sineSum_)):
+		sineSum.append(int(str(sineSum_[i])[1:-1].split()[0]))		#This complicated array manipulation is to isolate a single audio channel. If the file has mono audio instead of stereo, you don't need most of this line
+
+	timePoints = np.arange(beginTime, endTime, samplingInterval)
+#---------------------------------------------------Generate a complex soundwave (eventually will be read from microphone)--------------------
+else:
+	print("Generating Soundwave from Tones")
+	#Generate the pure sine waves
+	samplingFrequency = 100.0
+	samplingInterval = 1.0/samplingFrequency
+
+	beginTime = 0
+	endTime = 10
+
+	frequency_1 = 4
+	frequency_2 = 7
+
+	timePoints = np.arange(beginTime, endTime, samplingInterval)
+
+	sine1 = np.sin(2*np.pi*frequency_1*timePoints)
+	sine2 = np.sin(2*np.pi*frequency_2*timePoints)
+
+	#Make a complex soundwave out of the above pure tones
+	sineSum = sine1 + sine2
+#----------------------------------------------------Given an array of points representing a complex soundwave, separate out the pure tones
+def graphPureTone(axisIndex, times, sine, frequency):
+	axis[axisIndex].set_title("Pure Tone at " + str(frequency) + " Hz")
+	axis[axisIndex].plot(times, sine)
+	axis[axisIndex].set_xlabel("Time")
+	axis[axisIndex].set_ylabel("Amplitude")
+	axis[axisIndex].set_xlim([0, 1])
+
+def graphComplex(axisIndex, times, sine):
+	axis[axisIndex].set_title("Complex Soundwave")
+	axis[axisIndex].plot(times, sine)
+	axis[axisIndex].set_xlabel("Time")
+	axis[axisIndex].set_ylabel("Amplitude")
+
+def graphFourier(axisIndex, frequencyList, fourier):
+	axis[axisIndex].set_title("Fourier Transform")
+	axis[axisIndex].plot(frequencyList, fourier)
+	axis[axisIndex].set_xlabel("Frequency")
+	axis[axisIndex].set_ylabel("Amplitude")
+
+print("Performing Fourier Transform")
+#Perform the Fourier Transform
+fourierTransform = np.fft.fft(sineSum)/len(sineSum)		#Perform the Fourier Transform
+fourierTransform = fourierTransform[range(int(len(sineSum)/2))] # Exclude sampling frequency
+
+#We need to know all the frequencies to have an x axis
+timePointCount = len(sineSum)
+fourierTimePoints = np.arange(int(timePointCount/2))
+timePeriod = timePointCount/samplingFrequency
+frequencies = fourierTimePoints/timePeriod
+
+
+#------------------------------------------Given the Fourier Transform, identify the pure tones--------------------------------------------------
+pureFrequencies = []
+
+for strength in fourierTransform:
+	if abs(np.imag(strength)) > 0.1:
+		pureFrequencies.append(np.where(fourierTransform == strength)[0][0]/10)
+
+pp.pprint(pureFrequencies)	#For testing purposes only
+#------------------------------------------Given an array of frequencies of the pure tones, construct arrays for each tone-----------------------
+pureTones = []
+
+for frequency in pureFrequencies:
+	pureTones.append(np.sin(2*np.pi*frequency*timePoints))
+#-----------------------------------------------------Done with all math, display the graphs-----------------------------------------------------
+
+#Plotting Housekeeping
+numGraphs = 1 + 1 + len(pureTones)	#Complex Soundwave + Fourier Transform + Pure Tones
+
+plot_x = 15
+plot_y = 15
+figure, axis = plotter.subplots(numGraphs, 1, figsize=(plot_x, plot_y))
+plotter.subplots_adjust(hspace=2)
+
+#Graph the complex soundwave that we are starting with, either the one read from the file or the one created from tones
+if len(audioFile) > 0:
+	graphComplex(0, timePoints[beginTime:lengthGathered], sineSum[beginTime:lengthGathered])
+else:
+	graphComplex(0, timePoints, sineSum)
+
+#Graph the Fourier Transform of the complex soundwave
+graphFourier(1, frequencies, abs(fourierTransform))
+
+#Graph the Pure Tones
+for toneIndex in range(len(pureTones)):
+	graphPureTone(1 + 1 + toneIndex, timePoints, pureTones[toneIndex], pureFrequencies[toneIndex])
+
+#Actually plot the graphs
+plotter.show()
+										</pre>
+									</div>
+								</div>
 
 
 
 
 								<div style="text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
 									<h1>Personal Projects</h1>
-									<p>Works in progress. For more professional work, see above.</p>
+									<p>Fun personal work I've done in my free time. For more professional work, see above.</p>
 								</div>
 								<div style="border: 2px solid white;text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
 									<h2 class="major">Halloween Countdown Timer</h2>
