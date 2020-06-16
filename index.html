@@ -55,9 +55,211 @@
 										<br><br>Best viewed <a href="http://mhc-algorithms.github.io/">here</a></p>
 										<br>
 										<br>
-										<iframe style="width: 100%;height: 500px;" src="http://mhc-algorithms.github.io/" title="Algorithms"></iframe>
+										<iframe style="width: 100%;height: 500px;" src="http://mhc-algorithms.github.io/" title="Algorithms">The iframe doesn't appear to be working. Please try the link above instead.</iframe>
 								</div>
 
+
+								<div style="border: 2px solid white;text-align:center;padding:20px;margin-top:10px;margin-bottom:10px;">
+									<h2 class="major">Organization Sorting</h2>
+									<p>A script designed to sort members of a student organization into groups (specifically, games).
+									<div style="background-color:#444444;padding:5px;border-radius:5px">
+										<pre style="text-align:left;overflow:scroll;height:400px;font-size:0.7em;">'''
+Written by Ivy O'Neal-Odom (Class of or 2020) during Fall 2019
+
+This program sorts Renegades players into their games.
+
+
+It prioritizes seniority first, then speediness of the responses among classmates
+
+
+Player responses are stored in a downloaded .csv file (reading the .csv file may need to be changed based on the OS of the user)
+
+	Each row of the csv is 1 player response per row
+
+		Column F (index 5, since arrays start at 0) is the Class Year (2020, 2021, etc.)
+		Column C (index 2, since arrays start at 0) is the First Name of the player
+		In getMaxAndMinPlayers() the user is asked for the index of the first and last column of games
+		The columns between these values (inclusive, counting up from 0), are preferences.
+			The preference options are enumerated in POSSIBLE_PREFERENCES (they must be 1 character long and integers)
+			Any responses in these cells besides a POSSIBLE_PREFERENCES value will be ignored
+			If the player inputs multiple preferences of the same value (ie. 1 '1' and the rest are '5's),
+				Then the leftmost one is encountered first and given preference
+'''
+
+import pandas as pd
+import math
+
+#Debugging Values
+SENIOR_YEAR = 2020
+JUNIOR_YEAR = 2021
+SOPHMORE_YEAR = 2022
+FRESHMAN_YEAR = 2023
+
+POSSIBLE_PREFERENCES = [1, 2, 3, 4, 5] #Be sure to order these in decreasing order of desireability from left to right
+
+file_location = "Spring 2020 Game Distribution.csv"	#Be sure to change this as appropriate
+csv = pd.read_csv(file_location)
+csv = pd.DataFrame(csv)
+
+FIRST_COL = 6
+LAST_COL = 13
+
+#Each class will contain the players from those classes
+#We will iterate over the classes in this order, so seniority preference is given
+seniors = []
+juniors = []
+sophmores = []
+freshmen = []
+other_year_students = []
+
+classes = [seniors, juniors, other_year_students, sophmores, freshmen]
+student_preference_lists = []
+
+game_names = []
+max_players = []
+min_players = []
+game_player_lists = []
+game_player_name_lists = []
+
+#Initialize the class arrays
+def setupClasses():
+	for year_index in range(len(csv.index)):
+		class_year = csv.iloc[year_index, 5]
+		if (str(class_year) == str(SENIOR_YEAR)):
+			seniors.append(year_index)
+		elif(str(class_year) == str(JUNIOR_YEAR)):
+			juniors.append(year_index)
+		elif(str(class_year) == str(SOPHMORE_YEAR)):
+			sophmores.append(year_index)
+		elif(str(class_year) == str(FRESHMAN_YEAR)):
+			freshmen.append(year_index)
+		else:
+			other_year_students.append(year_index)
+
+#Get the acceptable range of player numbers for each game
+def getMaxAndMinPlayers():
+	games_len = LAST_COL - FIRST_COL
+
+	#For each game, construct the mins and maxes
+	for game_index in range(FIRST_COL, LAST_COL):
+		game_name = csv.columns.values[game_index]
+		game_names.append(game_name)
+
+		#Actual Use Values
+		temp_max_players = input("What is the maximum player count for " + str(game_name))
+		temp_min_players = input("What is the minimum player count for " + str(game_name))
+
+		#Debugging
+		#temp_max_players = 5
+		#temp_min_players = 3
+
+		game_player_lists.append([])
+		game_player_name_lists.append([])
+
+		max_players.append(int(temp_max_players))
+		min_players.append(int(temp_min_players))
+
+
+#Given a class year (and index of the student in that year), return a list of their preferences in descending order of preferability
+def getChoices(class_year, student_index):
+	preference_list = []
+	for preference in POSSIBLE_PREFERENCES:
+		for game_index in range(FIRST_COL, LAST_COL):
+			if (len(str(csv.iloc[student_index, game_index])) == 1):
+				if(int(csv.iloc[student_index, game_index]) == preference):
+					preference_list.append(game_index)
+
+	student_preference_lists.append([student_index, preference_list])
+
+	return preference_list
+
+
+#Print a given class year's students
+def printClass(classArray):
+	classPeople = ""
+
+	for student_index in classArray:
+		classPeople += str(csv.iloc[student_index, 2])
+		classPeople += " "
+		classPeople += str(csv.iloc[student_index, 3])
+		classPeople += ", "
+
+	classPeople = classPeople[:-2]
+
+	print (classPeople)
+
+
+#Iterate over each student, printing their preferences
+def printPreferences():
+	for preference in student_preference_lists:
+		print (csv.iloc[preference[0], 2] + " has the following preference list: ")
+		for game in range(len(preference[1])):
+			print (csv.columns.values[preference[1][game]] + " -> ")
+		print("")
+		print("")
+		print("")
+
+
+#Setup the classes so we can iterate by seniority
+setupClasses()
+
+#Get max and min players for each game
+getMaxAndMinPlayers()
+
+#Iterate over seniors, then juniors, etc.
+for class_year in classes:
+
+	#Iterate over each student in this class, in order of who responded first
+	for student_index in class_year:
+		
+		#For each student in a class, give them their highest rated class if it isn't full
+		choices = getChoices(class_year, student_index)
+		not_in_game = True
+		for game_index in choices:
+			if(not_in_game):
+				name_of_game = csv.columns.values[game_index]
+				index_of_game_in_array = game_names.index(name_of_game)
+				if(len(game_player_lists[index_of_game_in_array]) < max_players[index_of_game_in_array]):	#There's still room in the game
+					not_in_game = False
+					game_player_lists[index_of_game_in_array].append(student_index)
+					game_player_name_lists[index_of_game_in_array].append(str(csv.iloc[student_index, 2]) + " " + str(csv.iloc[student_index, 3]))
+
+#Print out the members of each game
+for index_of_game_in_array in range(len(game_player_lists)):
+	print (game_names[index_of_game_in_array] + ": ")
+	for player in game_player_name_lists[index_of_game_in_array]:
+		print ("	" + player)
+	print("")
+	print("")
+	print("")
+
+#Print out any lonely players, underfilled games, and unfilled games
+underfilled_games = []
+for index_of_game_in_array in range(len(game_player_lists)):
+	if len(game_player_lists[index_of_game_in_array]) < min_players[index_of_game_in_array]:
+		underfilled_games.append(game_names[index_of_game_in_array])
+
+unfilled_games = []
+for index_of_game_in_array in range(len(game_player_lists)):
+	if len(game_player_lists[index_of_game_in_array]) < max_players[index_of_game_in_array]:
+		unfilled_games.append(game_names[index_of_game_in_array])
+
+lonely_players = []
+for class_year in classes:
+	for student_index in class_year:	#For every student
+		lonely = True		#Assume loneliness
+		for game in game_player_lists:
+			for player_index in game:	#For every player in every game
+				if player_index == student_index:
+					lonely = False
+		if lonely:
+			lonely_players.append(str(csv.iloc[student_index, 2]) + " " + str(csv.iloc[student_index,3]))
+
+print ("Underfilled Games (don't meet their minimum requirement): " + str(underfilled_games))
+print ("Unfilled Games (aren't completely full, and can easily take any lonely players): " + str(unfilled_games))
+print ("Lonely Players (players who aren't in a game): " + str(lonely_players))</pre>
+									</div>
+								</div>
 
 
 
